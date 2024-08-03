@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Cryptocurrency Data</title>
+    
+        <style>
+            /* Add styles for the  table */
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .table th, .table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            .table th {
+                background-color: #f2f2f2;
+            }
+
+            /* Add styles for filter options */
+            #filter-options {
+                margin-top: 20px;
+            }
+
+            #filter-options label {
+                margin-right: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div>
+            
+            <h1>Cryptocurrency Data</h1>
+
+            <!-- Filter options -->
+            <div id="filter-options">            
+                   
+                <label for="name-filter">Filter by Name:</label>
+                <input type="text" id="name-filter">
+                <button onclick="applyFilters()">Apply Filters</button>
+            </div>
+            <br>
+            <!-- Table to display  data -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Percent Total Volume</th>
+                        <th>Volume USD</th>
+                        <th>Trading Pairs</th>
+                        <th>Exchange URL</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>  
+                        <td> {{item.name}} </td>
+                        <td> {{item.percent_total_volume}} </td>
+                        <td> {{item.volume_usd}} </td>
+                        <td> {{item.trading_pairs}} </td>
+                        <td> {{item.exchange_url}} </td>
+                        <td> {{item.updated}} </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            
+        </div>
+        <script> 
+           function applyFilters(){
+            const search_value = document.getElementById("name-filter").value;
+
+              window.location.href = "/home?q=" + search_value;
+           }           
+        
+
+        </script>
+    </body>
+
+</html>
