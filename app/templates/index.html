@@ -18,11 +18,6 @@
                 background-color: #f2f2f2;
             }
 
-            /* Add styles for filter options */
-            #filter-options {
-                margin-top: 20px;
-            }
-
             #filter-options label {
                 margin-right: 10px;
             }
@@ -34,12 +29,23 @@
             
             <h1>Cryptocurrency Data</h1>
 
-            <!-- Filter options -->
-            <div id="filter-options">            
-                   
-                <label for="name-filter">Filter by Name:</label>
-                <input type="text" id="name-filter">
-                <button onclick="applyFilters()">Apply Filters</button>
+            <div style="display: flex; width: 100%; flex-direction: row-reverse;">
+                <!-- Filter options -->
+                <div id="filter-options" >
+                    <label for="filter-value">Filter by Name:</label>
+                    <input type="text" id="filter-value">
+                    <button onclick="applyFilters();">Apply Filters</button>
+                </div>
+                <!-- Sorting options -->
+                <div id="sorting-options" style="padding-right: 10px;">
+                    <label for="sort-by">Sort by:</label>
+                    <select name="sort-by" id="sort-by">
+                        <option value="name">Name</option>
+                        <option value="date_updated">Updated</option>
+                        <option value="trading_pairs">Trading Pairs</option>
+                    </select>
+                    <button onclick="applySorting();">Apply Sorting</button>
+                </div>
             </div>
             <br>
             <!-- Table to display  data -->
@@ -62,7 +68,7 @@
                         <td> {{item.volume_usd}} </td>
                         <td> {{item.trading_pairs}} </td>
                         <td> {{item.exchange_url}} </td>
-                        <td> {{item.updated}} </td>
+                        <td> {{item.date_updated}} </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -70,13 +76,57 @@
             
             
         </div>
-        <script> 
-           function applyFilters(){
-            const search_value = document.getElementById("name-filter").value;
+        <script>
+            // DOM fully loaded and parsed
+            document.addEventListener("DOMContentLoaded", (event) => {
+                // Get URL parameters from the URL
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
 
-              window.location.href = "/home?q=" + search_value;
-           }           
-        
+                const action = urlParams.get('action')
+
+                if (action) {
+                    if (action == 'filter') {
+                        // Get Filter params
+                        const filter_by = urlParams.get('filter_by');
+                        const filter_value = urlParams.get('filter_value');
+
+                        // Set the filter value
+                        document.getElementById("filter-value").value = filter_value;
+                    }
+                    if (action == 'sort') {
+                        // Get Sort params
+                        const sort_by = urlParams.get('sort_by');
+
+                        // Set the sort by value
+                        document.getElementById("sort-by").value = sort_by;
+                    }
+                }
+
+
+
+            });
+
+            function applyFilters(){
+                // Get filter value
+                const filter_value = document.getElementById("filter-value").value;
+
+                // Load href with given params
+                window.location.href = "/?action=filter&filter_by=name&filter_value=" + filter_value;
+            }
+
+            function applySorting(){
+                // Get Sort order from the URL param
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const sort_order = urlParams.get('sort_order')
+
+                // Get sort by column from select box
+                const sort_by = document.getElementById("sort-by").value;
+
+                // Load href with given params
+                window.location.href = "/?action=sort&sort_by=" + sort_by + "&sort_order=" + (sort_order == 'asc' ? 'desc' : 'asc');
+            }
 
         </script>
     </body>

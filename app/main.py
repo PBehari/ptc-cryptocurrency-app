@@ -8,7 +8,7 @@ from api import cryptocurrency, filter_cryptocurrency, sort_cryptocurrency
 app = Flask(__name__)
 
 # Route to render the data in HTML template
-@app.route('/home')
+@app.route('/')
 def index():
     # Get API data
     api_data = cryptocurrency.get_api_data()
